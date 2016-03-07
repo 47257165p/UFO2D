@@ -6,45 +6,33 @@ class mainState extends Phaser.State {
     private cursor:Phaser.CursorKeys;
     private ACCELERATION = 500;
     private MAX_SPEED = 300;
+    private walls:Phaser.TilemapLayer;
+    private map:Phaser.Tilemap;
 
     preload():void {
         super.preload();
 
         this.load.image('ufo', 'assets/UFO_low.png');
         this.load.image('pickup', 'assets/Pickup_low.png');
-        this.load.image('0-0', 'assets/Background parts/Background-0-0.png');
-        this.load.image('0-1', 'assets/Background parts/Background-0-1.png');
-        this.load.image('0-2', 'assets/Background parts/Background-0-2.png');
-        this.load.image('1-0', 'assets/Background parts/Background-1-0.png');
-        this.load.image('1-1', 'assets/Background parts/Background-1-1.png');
-        this.load.image('1-2', 'assets/Background parts/Background-1-2.png');
-        this.load.image('2-0', 'assets/Background parts/Background-2-0.png');
-        this.load.image('2-1', 'assets/Background parts/Background-2-1.png');
-        this.load.image('2-2', 'assets/Background parts/Background-2-2.png');
-
+        this.load.tilemap('tilemap', 'assets/backgroundtiled.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.image('background', 'assets/Background_low.png');
         this.physics.startSystem(Phaser.Physics.ARCADE);
     }
 
     create():void {
         super.create();
-        //var background;
 
-        var image00 = this.add.sprite(0, 0, '0-0');
-        var image01 = this.add.sprite(image00.width, 0, '1-0');
-        var image02 = this.add.sprite(image00.width+image01.width, 0, '2-0');
-        var image10 = this.add.sprite(0, image00.height, '0-1');
-        var image11 = this.add.sprite(image10.width, image00.height, '1-1');
-        var image12 = this.add.sprite(image10.width+image11.width, image00.height, '2-1');
-        var image20 = this.add.sprite(0, image00.height+image10.width, '2-0');
-        var image21 = this.add.sprite(image20.width, 0, '1-2');
-        var image22 = this.add.sprite(image20.width+image21.width, 0, '2-2');
+        this.map = this.game.add.tilemap('tilemap');
+        this.map.addTilesetImage('paredes', 'background');
+        var background = this.map.createLayer('fondo');
+        this.walls = this.map.createLayer('paredes');
 
 
 
-        //background = this.add.sprite(0, 0, 'background');
-        //var scale = this.world.height / background.height;
-        //background.scale.setTo(scale, scale);
-
+        /*background = this.add.sprite(0, 0, 'background');
+        var scale = this.world.height / background.height;
+        background.scale.setTo(scale, scale);
+         */
         this.ufo = this.add.sprite(this.world.centerX, this.world.centerY, 'ufo');
         //this.ufo.scale.setTo(scale - 0.05, scale - 0.05);
         this.ufo.anchor.setTo(0.5, 0.5);
